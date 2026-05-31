@@ -63,22 +63,17 @@ function App() {
     <BrowserRouter>
       <Header user={user} />
       {
-        loading && <div className="loading">Cargando...</div>
-      }
-      {
         error && <div className="error">Error: {error}</div>
       }
-      {!loading && !error && (
-        <Routes>
-          <Route path="/registro" element={<Register />} />
+      <Routes>
+        <Route path="/registro" element={<Register />} />
           <Route path="/login" element={<Login onLogin={setUser} />} />
           <Route path="/about" element={<About />} />
-          <Route path="/" element={<Home stations={stations} />} />
-          <Route path="/mapa" element={<FuelMap stations={stations} />} />
-          <Route path="/lista" element={<FuelTable stations={stations} />} />
-          <Route path="/station/:id" element={<StationDetail stations={stations} user={user} />} />
-        </Routes>
-      )}
+          <Route path="/" element={<Home stations={stations} loading={loading}/>} />
+          <Route path="/mapa" element={<FuelMap stations={stations} loading={loading}/>} />
+          <Route path="/lista" element={<FuelTable stations={stations} loading={loading}/>} />
+          <Route path="/station/:id" element={<StationDetail stations={stations} user={user} loading={loading}/>} />
+      </Routes>
       <Footer />
     </BrowserRouter>
   )
