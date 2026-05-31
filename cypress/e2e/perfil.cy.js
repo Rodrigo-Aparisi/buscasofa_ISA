@@ -39,4 +39,27 @@ describe('Página de perfil de usuario', () => {
             .invoke('getItem', 'token').should('be.null');
     });
 
+    it('borra la cuenta tras confirmar y vuelve a la home', () => {
+        cy.visit('/perfil', { onBeforeLoad: sembrarSesion });
+
+        // Simulamos la respuesta del backend al DELETE: no llamamos al servidor real
+        cy.intercept('DELETE', '**/api/account', {
+            statusCode: 200,
+            body: { message: 'Cuenta eliminada' },
+        }).as('borrarCuenta');
+
+        // El componente pregunta con window.confirm: respondemos que SÍ
+        cy.on('window:confirm', () => true);
+
+        cy.get('[data-cy=perfil-delete]').click();          // pulsamos "Borrar cuenta"
+
+        // Esperamos a que se dispare la petición interceptada y comprobamos que llevó el token
+        cy.wait('@borrarCuenta').its('request.headers.authorization')
+            .should('contain', sesion.token);
+
+        cy.location('pathname').should('eq', '/');          // redirige a la home
+        cy.window().its('localStorage')                     // y la sesión queda limpia
+            .invoke('getItem', 'token').should('be.null');
+    });
+
 });
