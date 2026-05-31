@@ -15,6 +15,7 @@ import StationDetail from './components/StationDetail';
 import FuelTable from './components/FuelTable';
 import Register from './components/Register';
 import Login from './components/Login';
+import UserProfile from './components/UserProfile';
 import Footer from './components/Footer';
 import { NotFound } from './components/NotFound';
 
@@ -69,6 +70,7 @@ function App() {
       <Routes>
         <Route path="/registro" element={<Register />} />
           <Route path="/login" element={<Login onLogin={setUser} />} />
+          <Route path="/perfil" element={<UserProfile onLogout={() => setUser(null)} />} />
           <Route path="/about" element={<About />} />
           <Route path="/" element={<Home stations={stations} loading={loading}/>} />
           <Route path="/mapa" element={<FuelMap stations={stations} loading={loading}/>} />
